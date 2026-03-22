@@ -1,0 +1,6 @@
+*.tar.gz
+*.zip
+ngrok
+ngrok-*
+.DS_Store
+*.log

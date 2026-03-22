@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEVY | Sonic Architect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff00ff;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #050505;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .glitch {
+            position: relative;
+            animation: glitch-skew 1s infinite linear alternate-reverse;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            animation: glitch-anim 2s infinite linear alternate-reverse;
+            color: var(--neon-cyan);
+            z-index: -1;
+        }
+        
+        .glitch::after {
+            animation: glitch-anim2 3s infinite linear alternate-reverse;
+            color: var(--neon-pink);
+            z-index: -2;
+        }
+        
+        @keyframes glitch-anim {
+            0% { clip-path: inset(40% 0 61% 0); transform: translate(-2px, 2px); }
+            20% { clip-path: inset(92% 0 1% 0); transform: translate(2px, -2px); }
+            40% { clip-path: inset(43% 0 1% 0); transform: translate(-2px, 2px); }
+            60% { clip-path: inset(25% 0 58% 0); transform: translate(2px, -2px); }
+            80% { clip-path: inset(54% 0 7% 0); transform: translate(-2px, 2px); }
+            100% { clip-path: inset(58% 0 43% 0); transform: translate(2px, -2px); }
+        }
+        
+        @keyframes glitch-anim2 {
+            0% { clip-path: inset(65% 0 25% 0); transform: translate(2px, -2px); }
+            20% { clip-path: inset(15% 0 4% 0); transform: translate(-2px, 2px); }
+            40% { clip-path: inset(89% 0 11% 0); transform: translate(2px, -2px); }
+            60% { clip-path: inset(33% 0 68% 0); transform: translate(-2px, 2px); }
+            80% { clip-path: inset(71% 0 29% 0); transform: translate(2px, -2px); }
+            100% { clip-path: inset(4% 0 95% 0); transform: translate(-2px, 2px); }
+        }
+        
+        .visualizer-bar {
+            background: linear-gradient(180deg, var(--neon-cyan) 0%, var(--neon-pink) 100%);
+            width: 4px;
+            border-radius: 2px;
+            animation: dance 0.5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes dance {
+            0% { height: 20px; opacity: 0.5; }
+            100% { height: 60px; opacity: 1; }
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--neon-cyan), var(--neon-pink));
+            border-radius: 4px;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #fff 0%, var(--neon-cyan) 50%, var(--neon-pink) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .hover-glow {
+            transition: all 0.3s ease;
+        }
+        .hover-glow:hover {
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .vinyl-spin {
+            animation: spin 4s linear infinite;
+        }
+        .vinyl-spin:hover {
+            animation-duration: 0.5s;
+        }
+        
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .pulse-btn {
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 243, 255, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(0, 243, 255, 0.8); }
+        }
+        
+        @media (max-width: 768px) {
+            .glitch { animation: none; }
+            .glitch::before, .glitch::after { animation: none; display: none; }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-cyan-500 selection:text-black">
+
+    <canvas id="particles"></canvas>
+
+    <nav class="fixed top-0 w-full z-50 glass border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="font-orbitron font-bold text-2xl tracking-wider gradient-text cursor-pointer" onclick="window.scrollTo(0,0)">
+                LEVY
+            </div>
+            <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-widest uppercase">
+                <a href="#about" class="hover:text-cyan-400 transition-colors">Profile</a>
+                <a href="#mixes" class="hover:text-cyan-400 transition-colors">Sessions</a>
+                <a href="#events" class="hover:text-cyan-400 transition-colors">Events</a>
+                <a href="#contact" class="hover:text-cyan-400 transition-colors">Connect</a>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden text-cyan-400">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden glass border-t border-white/10">
+            <div class="flex flex-col p-6 space-y-4 text-center">
+                <a href="#about" class="hover:text-cyan-400 transition-colors py-2">Profile</a>
+                <a href="#mixes" class="hover:text-cyan-400 transition-colors py-2">Sessions</a>
+                <a href="#events" class="hover:text-cyan-400 transition-colors py-2">Events</a>
+                <a href="#contact" class="hover:text-cyan-400 transition-colors py-2">Connect</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <div class="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-black to-black z-0"></div>
+        <div class="absolute inset-0 z-0">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+
+        <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
+            <div class="mb-6 flex justify-center items-end space-x-2 h-16">
+                <div class="visualizer-bar" style="animation-delay: 0s"></div>
+                <div class="visualizer-bar" style="animation-delay: 0.1s"></div>
+                <div class="visualizer-bar" style="animation-delay: 0.2s"></div>
+                <div class="visualizer-bar" style="animation-delay: 0.3s"></div>
+                <div class="visualizer-bar" style="animation-delay: 0.4s"></div>
+                <div class="visualizer-bar" style="animation-delay: 0.5s"></div>
+                <div class="visualizer-bar" style="animation-delay: 0.6s"></div>
+                <div class="visualizer-bar" style="animation-delay: 0.7s"></div>
+            </div>
+            
+            <h1 class="font-orbitron text-6xl md:text-8xl lg:text-9xl font-black mb-4 tracking-tighter">
+                <span class="glitch gradient-text" data-text="SONIC">SONIC</span><br>
+                <span class="text-white">ARCHITECT</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-gray-400 mb-8 max-w-2xl mx-auto font-light">
+                Curating frequencies that move bodies and shift realities. 
+                <span class="text-cyan-400">NYC</span> • <span class="text-pink-500">Worldwide</span>
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})" 
+                        class="pulse-btn px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-none font-orbitron font-bold text-lg tracking-wider hover:scale-105 transition-transform border border-cyan-400/50">
+                    BOOK NOW
+                </button>
+                <button onclick="document.getElementById('mixes').scrollIntoView({behavior: 'smooth'})"
+                        class="px-8 py-4 glass font-orbitron font-bold text-lg tracking-wider hover:bg-white/10 transition-all border border-white/20">
+                    HEAR MY SOUND
+                </button>
+            </div>
+            
+            <div class="mt-12 text-sm text-gray-500 font-mono">
+                <span id="live-status" class="inline-flex items-center">
+                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                    SYSTEM ONLINE • ACCEPTING BOOKINGS FOR 2026
+                </span>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+    </section>
+
+    <section id="about" class="relative py-32 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-pink-500 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                    <div class="relative glass p-8 rounded-lg">
+                        <div class="aspect-square bg-gradient-to-br from-gray-800 to-black rounded-lg flex items-center justify-center overflow-hidden">
+                            <div class="vinyl-spin w-64 h-64 rounded-full bg-gradient-to-br from-gray-900 via-black to-gray-800 border-8 border-gray-800 shadow-2xl relative">
+                                <div class="absolute inset-0 rounded-full bg-[conic-gradient(from_0deg,transparent_0_340deg,white_340deg_360deg)] opacity-20"></div>
+                                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-cyan-500/20 rounded-full blur-xl"></div>
+                                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full"></div>
+                                <div class="absolute inset-4 border border-white/10 rounded-full"></div>
+                                <div class="absolute inset-8 border border-white/5 rounded-full"></div>
+                                <div class="absolute inset-12 border border-white/5 rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <h2 class="font-orbitron text-4xl md:text-5xl font-bold mb-6">
+                        BEYOND THE <span class="gradient-text">DECKS</span>
+                    </h2>
+                    <p class="text-gray-300 text-lg leading-relaxed">
+                        Not just mixing tracks—engineering experiences. With over a decade behind the decks, 
+                        I've learned that DJing is frequency manipulation. It's reading the room's energy 
+                        and translating it into sound waves that command movement.
+                    </p>
+                    <div class="grid grid-cols-3 gap-6 py-6 border-y border-white/10">
+                        <div class="text-center">
+                            <div class="font-orbitron text-3xl font-bold text-cyan-400 counter" data-target="10">0</div>
+                            <div class="text-xs text-gray-500 uppercase tracking-wider mt-1">Years</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-orbitron text-3xl font-bold text-pink-500 counter" data-target="500">0</div>
+                            <div class="text-xs text-gray-500 uppercase tracking-wider mt-1">Events</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-orbitron text-3xl font-bold text-purple-400 counter" data-target="50">0</div>
+                            <div class="text-xs text-gray-500 uppercase tracking-wider mt-1">Cities</div>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-4 py-2 glass text-sm font-semibold text-cyan-400 border border-cyan-400/30">TECHNO</span>
+                        <span class="px-4 py-2 glass text-sm font-semibold text-pink-400 border border-pink-400/30">HOUSE</span>
+                        <span class="px-4 py-2 glass text-sm font-semibold text-purple-400 border border-purple-400/30">DRUM & BASS</span>
+                        <span class="px-4 py-2 glass text-sm font-semibold text-yellow-400 border border-yellow-400/30">HIP HOP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="mixes" class="relative py-32 px-6 bg-gradient-to-b from-black via-gray-900/50 to-black">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="font-orbitron text-4xl md:text-6xl font-bold text-center mb-16">
+                LATEST <span class="gradient-text">SESSIONS</span>
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="group relative hover-glow glass rounded-xl overflow-hidden cursor-pointer" onclick="playMix(this)">
+                    <div class="aspect-video bg-gradient-to-br from-purple-900 to-blue-900 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-orbitron text-xl font-bold mb-2 group-hover:text-cyan-400 transition-colors">Midnight Protocol</h3>
+                        <p class="text-gray-400 text-sm mb-4">Deep techno journey through industrial soundscapes. 2-hour warehouse session.</p>
+                        <div class="flex justify-between items-center text-xs text-gray-500">
+                            <span>TECHNO</span>
+                            <span>2:14:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group relative hover-glow glass rounded-xl overflow-hidden cursor-pointer" onclick="playMix(this)">
+                    <div class="aspect-video bg-gradient-to-br from-pink-900 to-purple-900 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-orbitron text-xl font-bold mb-2 group-hover:text-pink-400 transition-colors">Neon Sunrise</h3>
+                        <p class="text-gray-400 text-sm mb-4">Melodic house for the after-hours crowd. Brooklyn rooftop vibes.</p>
+                        <div class="flex justify-between items-center text-xs text-gray-500">
+                            <span>HOUSE</span>
+                            <span>1:45:30</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group relative hover-glow glass rounded-xl overflow-hidden cursor-pointer" onclick="playMix(this)">
+                    <div class="aspect-video bg-gradient-to-br from-cyan-900 to-blue-900 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 to-purple-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-orbitron text-xl font-bold mb-2 group-hover:text-cyan-400 transition-colors">Bass Theory</h3>
+                        <p class="text-gray-400 text-sm mb-4">Drum & bass exploration. High-energy selections for the heads.</p>
+                        <div class="flex justify-between items-center text-xs text-gray-500">
+                            <span>D&B</span>
+                            <span>1:30:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="events" class="relative py-32 px-6">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="font-orbitron text-4xl md:text-6xl font-bold text-center mb-16">
+                UPCOMING <span class="gradient-text">TRANSMISSIONS</span>
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="glass p-6 md:p-8 rounded-xl flex flex-col md:flex-row items-center justify-between hover-glow group cursor-pointer">
+                    <div class="flex items-center space-x-6 mb-4 md:mb-0">
+                        <div class="text-center min-w-[80px]">
+                            <div class="text-3xl font-orbitron font-bold text-cyan-400">MAR</div>
+                            <div class="text-2xl font-bold">28</div>
+                        </div>
+                        <div>
+                            <h3 class="font-orbitron text-2xl font-bold mb-1 group-hover:text-cyan-400 transition-colors">Warehouse Project</h3>
+                            <p class="text-gray-400">Brooklyn, NY • 11PM - 6AM</p>
+                        </div>
+                    </div>
+                    <button class="px-6 py-3 border border-cyan-400 text-cyan-400 font-semibold hover:bg-cyan-400 hover:text-black transition-all rounded">
+                        GET TICKETS
+                    </button>
+                </div>
+
+                <div class="glass p-6 md:p-8 rounded-xl flex flex-col md:flex-row items-center justify-between hover-glow group cursor-pointer">
+                    <div class="flex items-center space-x-6 mb-4 md:mb-0">
+                        <div class="text-center min-w-[80px]">
+                            <div class="text-3xl font-orbitron font-bold text-pink-400">APR</div>
+                            <div class="text-2xl font-bold">15</div>
+                        </div>
+                        <div>
+                            <h3 class="font-orbitron text-2xl font-bold mb-1 group-hover:text-pink-400 transition-colors">Electric Forest</h3>
+                            <p class="text-gray-400">Miami, FL • Sunset Session</p>
+                        </div>
+                    </div>
+                    <button class="px-6 py-3 border border-pink-400 text-pink-400 font-semibold hover:bg-pink-400 hover:text-black transition-all rounded">
+                        GET TICKETS
+                    </button>
+                </div>
+
+                <div class="glass p-6 md:p-8 rounded-xl flex flex-col md:flex-row items-center justify-between hover-glow group cursor-pointer opacity-50">
+                    <div class="flex items-center space-x-6 mb-4 md:mb-0">
+                        <div class="text-center min-w-[80px]">
+                            <div class="text-3xl font-orbitron font-bold text-gray-500">MAY</div>
+                            <div class="text-2xl font-bold">02</div>
+                        </div>
+                        <div>
+                            <h3 class="font-orbitron text-2xl font-bold mb-1">Private Event</h3>
+                            <p class="text-gray-400">TBA • Secret Location</p>
+                        </div>
+                    </div>
+                    <span class="px-6 py-3 border border-gray-600 text-gray-500 font-semibold rounded cursor-not-allowed">
+                        SOLD OUT
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="relative py-32 px-6 bg-gradient-to-t from-black via-gray-900/30 to-black">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="font-orbitron text-4xl md:text-6xl font-bold mb-8">
+                INITIATE <span class="gradient-text">CONTACT</span>
+            </h2>
+            <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
+                Ready to elevate your event? Let's engineer an unforgettable sonic experience.
+            </p>
+
+            <form class="max-w-lg mx-auto space-y-6 text-left" onsubmit="handleSubmit(event)">
+                <div class="relative group">
+                    <input type="text" id="name" required 
+                           class="w-full bg-transparent border-b-2 border-gray-700 py-4 px-2 focus:outline-none focus:border-cyan-400 transition-colors peer placeholder-transparent"
+                           placeholder="Name">
+                    <label for="name" class="absolute left-2 top-4 text-gray-500 transition-all peer-focus:-top-6 peer-focus:text-xs peer-focus:text-cyan-400 peer-valid:-top-6 peer-valid:text-xs peer-valid:text-cyan-400">
+                        YOUR NAME
+                    </label>
+                </div>
+                
+                <div class="relative group">
+                    <input type="email" id="email" required 
+                           class="w-full bg-transparent border-b-2 border-gray-700 py-4 px-2 focus:outline-none focus:border-cyan-400 transition-colors peer placeholder-transparent"
+                           placeholder="Email">
+                    <label for="email" class="absolute left-2 top-4 text-gray-500 transition-all peer-focus:-top-6 peer-focus:text-xs peer-focus:text-cyan-400 peer-valid:-top-6 peer-valid:text-xs peer-valid:text-cyan-400">
+                        EMAIL ADDRESS
+                    </label>
+                </div>
+                
+                <div class="relative group">
+                    <select id="event-type" required
+                            class="w-full bg-transparent border-b-2 border-gray-700 py-4 px-2 focus:outline-none focus:border-cyan-400 transition-colors text-gray-300">
+                        <option value="" disabled selected class="bg-black">SELECT EVENT TYPE</option>
+                        <option value="club" class="bg-black">Club Night</option>
+                        <option value="festival" class="bg-black">Festival</option>
+                        <option value="private" class="bg-black">Private Event</option>
+                        <option value="corporate" class="bg-black">Corporate</option>
+                        <option value="wedding" class="bg-black">Wedding</option>
+                    </select>
+                </div>
+                
+                <div class="relative group">
+                    <textarea id="message" rows="4" required
+                              class="w-full bg-transparent border-b-2 border-gray-700 py-4 px-2 focus:outline-none focus:border-cyan-400 transition-colors peer placeholder-transparent resize-none"
+                              placeholder="Message"></textarea>
+                    <label for="message" class="absolute left-2 top-4 text-gray-500 transition-all peer-focus:-top-6 peer-focus:text-xs peer-focus:text-cyan-400 peer-valid:-top-6 peer-valid:text-xs peer-valid:text-cyan-400">
+                        TELL ME ABOUT YOUR EVENT
+                    </label>
+                </div>
+
+                <button type="submit" 
+                        class="w-full py-4 bg-gradient-to-r from-cyan-500 to-pink-500 font-orbitron font-bold text-lg tracking-wider hover:opacity-90 transition-opacity mt-8 rounded">
+                    TRANSMIT MESSAGE
+                </button>
+            </form>
+
+            <div class="mt-16 flex justify-center space-x-8">
+                <a href="#" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/></svg>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-white/10 py-8 px-6 text-center text-gray-600 text-sm">
+        <p class="font-mono">&copy; 2026 LEVY. ALL SYSTEMS OPERATIONAL.</p>
+    </footer>
+
+    <div id="toast" class="fixed bottom-8 right-8 transform translate-y-24 transition-transform duration-300 z-50 glass px-6 py-4 rounded-lg border-l-4 border-cyan-400 max-w-sm">
+        <div class="flex items-center space-x-3">
+            <div class="text-cyan-400">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <div>
+                <h4 class="font-bold text-white">Message Sent</h4>
+                <p class="text-sm text-gray-400">Transmission received. I'll be in touch.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            
+            draw() {
+                ctx.fillStyle = 'rgba(0, 243, 255, ' + this.opacity + ')';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle());
+            }
+        }
+        initParticles();
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            
+            particles.forEach((p1, i) => {
+                particles.slice(i + 1).forEach(p2 => {
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = 'rgba(0, 243, 255, ' + (0.1 * (1 - distance / 100)) + ')';
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+            
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        gsap.from("h1", {
+            y: 100,
+            opacity: 0,
+            duration: 1.5,
+            ease: "power4.out",
+            delay: 0.5
+        });
+
+        const counters = document.querySelectorAll('.counter');
+        counters.forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-target'));
+            gsap.to(counter, {
+                innerHTML: target,
+                duration: 2,
+                snap: { innerHTML: 1 },
+                scrollTrigger: {
+                    trigger: counter,
+                    start: "top 80%",
+                    once: true
+                }
+            });
+        });
+
+        gsap.utils.toArray('section').forEach(section => {
+            gsap.from(section.querySelectorAll('h2, p, .glass'), {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.2,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 70%",
+                    once: true
+                }
+            });
+        });
+
+        gsap.from("#mixes .glass", {
+            y: 100,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+                trigger: "#mixes",
+                start: "top 70%",
+                once: true
+            }
+        });
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "TRANSMITTING...";
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerText = "TRANSMITTED";
+                btn.classList.add('bg-green-500');
+                showToast();
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                    btn.classList.remove('bg-green-500');
+                    e.target.reset();
+                }, 3000);
+            }, 1500);
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-24');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24');
+            }, 4000);
+        }
+
+        function playMix(element) {
+            const title = element.querySelector('h3').innerText;
+            
+            const ripple = document.createElement('div');
+            ripple.className = 'absolute inset-0 bg-cyan-400/20 animate-ping rounded-xl';
+            element.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 1000);
+            
+            const toast = document.getElementById('toast');
+            toast.querySelector('h4').innerText = "Now Playing";
+            toast.querySelector('p').innerText = title + " • Loading audio stream...";
+            toast.classList.remove('translate-y-24');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-24');
+                setTimeout(() => {
+                    toast.querySelector('h4').innerText = "Message Sent";
+                    toast.querySelector('p').innerText = "Transmission received. I'll be in touch.";
+                }, 500);
+            }, 3000);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            gsap.to('.absolute.rounded-full', {
+                x: x * 30,
+                y: y * 30,
+                duration: 1,
+                ease: "power2.out"
+            });
+        });
+
+        setInterval(() => {
+            const glitch = document.querySelector('.glitch');
+            if (glitch && Math.random() > 0.7) {
+                glitch.style.animation = 'none';
+                setTimeout(() => {
+                    glitch.style.animation = 'glitch-skew 1s infinite linear alternate-reverse';
+                }, 100);
+            }
+        }, 3000);
+
+        setInterval(() => {
+            const status = document.getElementById('live-status');
+            const dots = status.querySelector('span');
+            dots.style.opacity = Math.random() > 0.5 ? '1' : '0.3';
+        }, 2000);
+    </script>
+</body>
+</html>
