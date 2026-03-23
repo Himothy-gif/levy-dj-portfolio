@@ -3,749 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YUJO | The Resurrected Frequency</title>
+    <title>YUJO | Underground Frequency</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --void-black: #050505;
-            --temple-gold: #c9a961;
-            --neon-amber: #ff9500;
-            --blood-red: #8b0000;
-            --sacred-bronze: #cd7f32;
-            --electric-cyan: #00d4ff;
-            --deep-purple: #1a0b2e;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--void-black);
-            color: #e0e0e0;
-            overflow-x: hidden;
-            cursor: crosshair;
-        }
-        
-        .font-cinzel {
-            font-family: 'Cinzel', serif;
-        }
-        
-        .font-orbitron {
-            font-family: 'Orbitron', sans-serif;
-        }
-        
-        .ancient-text {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .ancient-text::before {
-            content: attr(data-text);
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, var(--temple-gold), transparent);
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 3s infinite;
-            opacity: 0.3;
-        }
-        
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        
-        .deity-glitch {
-            position: relative;
-            animation: deity-pulse 4s infinite;
-        }
-        
-        .deity-glitch::before,
-        .deity-glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.8;
-        }
-        
-        .deity-glitch::before {
-            color: var(--blood-red);
-            z-index: -1;
-            animation: glitch-1 3s infinite linear alternate-reverse;
-            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-        }
-        
-        .deity-glitch::after {
-            color: var(--electric-cyan);
-            z-index: -2;
-            animation: glitch-2 4s infinite linear alternate-reverse;
-            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-        }
-        
-        @keyframes glitch-1 {
-            0% { transform: translate(0); }
-            20% { transform: translate(-3px, 3px); }
-            40% { transform: translate(-3px, -3px); }
-            60% { transform: translate(3px, 3px); }
-            80% { transform: translate(3px, -3px); }
-            100% { transform: translate(0); }
-        }
-        
-        @keyframes glitch-2 {
-            0% { transform: translate(0); }
-            20% { transform: translate(3px, -3px); }
-            40% { transform: translate(3px, 3px); }
-            60% { transform: translate(-3px, -3px); }
-            80% { transform: translate(-3px, 3px); }
-            100% { transform: translate(0); }
-        }
-        
-        @keyframes deity-pulse {
-            0%, 100% { text-shadow: 0 0 20px var(--temple-gold), 0 0 40px var(--blood-red); }
-            50% { text-shadow: 0 0 40px var(--temple-gold), 0 0 80px var(--blood-red), 0 0 100px var(--electric-cyan); }
-        }
-        
-        #sacred-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.4;
-        }
-        
-        .brutalist-border {
-            border: 2px solid var(--temple-gold);
-            box-shadow: 4px 4px 0 var(--blood-red);
-            transition: all 0.3s ease;
-        }
-        
-        .brutalist-border:hover {
-            box-shadow: 8px 8px 0 var(--electric-cyan);
-            transform: translate(-2px, -2px);
-        }
-        
-        ::-webkit-scrollbar {
-            width: 12px;
-            background: var(--void-black);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, var(--temple-gold), var(--blood-red));
-            border: 2px solid var(--void-black);
-        }
-        
-        .ritual-btn {
-            background: transparent;
-            border: 3px solid var(--temple-gold);
-            color: var(--temple-gold);
-            font-family: 'Cinzel', serif;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-        
-        .ritual-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, var(--temple-gold), transparent);
-            transition: left 0.5s ease;
-        }
-        
-        .ritual-btn:hover::before {
-            left: 100%;
-        }
-        
-        .ritual-btn:hover {
-            background: var(--temple-gold);
-            color: var(--void-black);
-            box-shadow: 0 0 30px var(--temple-gold);
-        }
-        
-        .cuneiform-bg {
-            background-image: 
-                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(201, 169, 97, 0.03) 35px, rgba(201, 169, 97, 0.03) 70px),
-                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(139, 0, 0, 0.03) 35px, rgba(139, 0, 0, 0.03) 70px);
-        }
-        
-        .temple-glass {
-            background: rgba(5, 5, 5, 0.85);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(201, 169, 97, 0.2);
-            box-shadow: 0 0 40px rgba(201, 169, 97, 0.1);
-        }
-        
-        @keyframes blood-drip {
-            0% { height: 0; opacity: 0; }
-            10% { height: 100%; opacity: 1; }
-            90% { height: 100%; opacity: 1; }
-            100% { height: 100%; opacity: 0; }
-        }
-        
-        .blood-line {
-            position: absolute;
-            width: 2px;
-            background: linear-gradient(180deg, var(--blood-red), transparent);
-            animation: blood-drip 8s infinite;
-        }
-        
-        @media (max-width: 768px) {
-            .deity-glitch::before, .deity-glitch::after { display: none; }
-            .font-cinzel { letter-spacing: 0.1em; }
-        }
+        :root { --neon-green: #00ff41; --void-black: #0a0a0f; }
+        body { font-family: 'Inter', sans-serif; background: var(--void-black); color: #fff; overflow-x: hidden; }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .font-rajdhani { font-family: 'Rajdhani', sans-serif; }
+        .cyber-grid { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0,255,65,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,65,0.03) 1px, transparent 1px); background-size: 50px 50px; animation: grid-move 20s linear infinite; pointer-events: none; z-index: 0; }
+        @keyframes grid-move { 0% { transform: perspective(500px) rotateX(60deg) translateY(0); } 100% { transform: perspective(500px) rotateX(60deg) translateY(50px); } }
+        .eq-bar { width: 6px; background: linear-gradient(180deg, #00ff41, #00d4ff); border-radius: 3px; animation: eq-dance 0.5s ease-in-out infinite alternate; }
+        @keyframes eq-dance { 0% { height: 10px; } 100% { height: 50px; } }
+        .neon-text { text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 40px #00ff41; }
+        .club-card { background: linear-gradient(135deg, rgba(26,11,46,0.9), rgba(10,10,15,0.95)); border: 1px solid rgba(0,255,65,0.3); backdrop-filter: blur(10px); transition: all 0.3s ease; }
+        .club-card:hover { border-color: #00ff41; box-shadow: 0 0 30px rgba(0,255,65,0.3); transform: translateY(-5px); }
+        .vinyl-spin { animation: spin 3s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        ::-webkit-scrollbar { width: 8px; background: #0a0a0f; }
+        ::-webkit-scrollbar-thumb { background: #00ff41; border-radius: 4px; }
     </style>
 </head>
-<body class="antialiased selection:bg-red-900 selection:text-yellow-200 cuneiform-bg">
-
-    <canvas id="sacred-canvas"></canvas>
-
-    <div class="blood-line" style="left: 10%; animation-delay: 0s;"></div>
-    <div class="blood-line" style="left: 25%; animation-delay: 2s;"></div>
-    <div class="blood-line" style="left: 75%; animation-delay: 4s;"></div>
-    <div class="blood-line" style="left: 90%; animation-delay: 6s;"></div>
-
-    <nav class="fixed top-0 w-full z-50 temple-glass border-b border-yellow-900/30">
+<body class="antialiased selection:bg-green-500 selection:text-black">
+    <div class="cyber-grid"></div>
+    <nav class="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-green-500/20">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="font-cinzel font-bold text-2xl tracking-widest text-yellow-600 cursor-pointer hover:text-yellow-400 transition-colors" onclick="window.scrollTo(0,0)">
-                𒀭 YUJO
+            <div class="font-orbitron font-bold text-2xl tracking-widest text-green-400 cursor-pointer" onclick="window.scrollTo(0,0)">YUJO</div>
+            <div class="hidden md:flex space-x-8 text-sm font-rajdhani font-bold tracking-widest uppercase">
+                <a href="#vibe" class="hover:text-green-400 transition-colors">The Vibe</a>
+                <a href="#mixes" class="hover:text-green-400 transition-colors">Mixes</a>
+                <a href="#events" class="hover:text-green-400 transition-colors">Events</a>
+                <a href="#book" class="hover:text-green-400 transition-colors">Book Now</a>
             </div>
-            <div class="hidden md:flex space-x-8 text-xs font-orbitron tracking-[0.3em] uppercase">
-                <a href="#prophecy" class="hover:text-red-500 transition-colors">Prophecy</a>
-                <a href="#relics" class="hover:text-red-500 transition-colors">Relics</a>
-                <a href="#rituals" class="hover:text-red-500 transition-colors">Rituals</a>
-                <a href="#summon" class="hover:text-red-500 transition-colors">Summon</a>
-            </div>
-            <button id="mobile-menu-btn" class="md:hidden text-yellow-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            <button id="mobile-menu-btn" class="md:hidden text-green-400">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
             </button>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden temple-glass border-t border-yellow-900/30">
-            <div class="flex flex-col p-6 space-y-4 text-center font-orbitron text-xs tracking-widest">
-                <a href="#prophecy" class="hover:text-red-500 transition-colors py-2">Prophecy</a>
-                <a href="#relics" class="hover:text-red-500 transition-colors py-2">Relics</a>
-                <a href="#rituals" class="hover:text-red-500 transition-colors py-2">Rituals</a>
-                <a href="#summon" class="hover:text-red-500 transition-colors py-2">Summon</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-black/95 border-t border-green-500/20">
+            <div class="flex flex-col p-6 space-y-4 text-center font-rajdhani font-bold tracking-widest">
+                <a href="#vibe" class="hover:text-green-400 transition-colors py-2">The Vibe</a>
+                <a href="#mixes" class="hover:text-green-400 transition-colors py-2">Mixes</a>
+                <a href="#events" class="hover:text-green-400 transition-colors py-2">Events</a>
+                <a href="#book" class="hover:text-green-400 transition-colors py-2">Book Now</a>
             </div>
         </div>
     </nav>
 
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-        <div class="absolute inset-0 bg-gradient-to-b from-red-900/10 via-black to-black z-0"></div>
-        <div class="absolute inset-0 z-0">
-            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-yellow-600/10 rounded-full blur-3xl animate-pulse"></div>
-            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
-
+        <div class="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-black to-black z-0"></div>
         <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
-            <div class="mb-4 font-cinzel text-yellow-700 text-sm tracking-[0.5em] uppercase animate-pulse">
-                The Resurrection Protocol Initiated
+            <div class="mb-8 flex justify-center items-end space-x-1 h-16">
+                <div class="eq-bar" style="animation-delay:0s;animation-duration:0.4s"></div>
+                <div class="eq-bar" style="animation-delay:0.1s;animation-duration:0.6s"></div>
+                <div class="eq-bar" style="animation-delay:0.2s;animation-duration:0.5s"></div>
+                <div class="eq-bar" style="animation-delay:0.3s;animation-duration:0.7s"></div>
+                <div class="eq-bar" style="animation-delay:0.4s;animation-duration:0.4s"></div>
+                <div class="eq-bar" style="animation-delay:0.5s;animation-duration:0.6s"></div>
+                <div class="eq-bar" style="animation-delay:0.6s;animation-duration:0.5s"></div>
+                <div class="eq-bar" style="animation-delay:0.7s;animation-duration:0.8s"></div>
+                <div class="eq-bar" style="animation-delay:0.8s;animation-duration:0.4s"></div>
+                <div class="eq-bar" style="animation-delay:0.9s;animation-duration:0.6s"></div>
             </div>
-            
-            <h1 class="font-cinzel text-6xl md:text-8xl lg:text-9xl font-black mb-6 tracking-tighter">
-                <span class="deity-glitch ancient-text text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 via-yellow-600 to-red-800" data-text="YUJO">YUJO</span>
-            </h1>
-            
-            <p class="font-cinzel text-xl md:text-2xl text-yellow-600/80 mb-4 tracking-widest uppercase">
-                Ancient Deity of The Sacred Frequency
-            </p>
-            
-            <p class="text-lg md:text-xl text-gray-400 mb-8 max-w-2xl mx-auto font-light italic border-l-2 border-red-900 pl-6">
-                "From the temples of Ur, where Enki first forged the divine BALAG drum, 
-                I have returned. Reincarnated through the digital void to command the frequencies 
-                that move souls and alter realities."
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
-                <button onclick="document.getElementById('summon').scrollIntoView({behavior: 'smooth'})" 
-                        class="ritual-btn px-10 py-5 text-lg font-bold tracking-widest">
-                    INITIATE SUMMONING
-                </button>
-                <button onclick="document.getElementById('relics').scrollIntoView({behavior: 'smooth'})"
-                        class="px-10 py-5 border border-red-900/50 text-red-500 font-orbitron font-bold text-lg tracking-widest hover:bg-red-900/20 transition-all uppercase">
-                    Witness The Relics
-                </button>
+            <h1 class="font-orbitron text-6xl md:text-8xl lg:text-9xl font-black mb-4 tracking-tighter neon-text">YUJO</h1>
+            <p class="font-rajdhani text-xl md:text-3xl text-green-400 mb-2 tracking-widest uppercase font-bold">Underground Frequency</p>
+            <p class="text-lg md:text-xl text-gray-400 mb-8 max-w-2xl mx-auto font-light">Not your average selector. A decade behind the decks, moving crowds from Kingston basslines to Berlin warehouses. Reggae roots, techno soul.</p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
+                <button onclick="document.getElementById('book').scrollIntoView({behavior:'smooth'})" class="px-10 py-5 bg-green-500 text-black font-orbitron font-bold text-lg tracking-widest hover:bg-green-400 transition-all uppercase rounded shadow-lg shadow-green-500/50">Book The Vibe</button>
+                <button onclick="document.getElementById('mixes').scrollIntoView({behavior:'smooth'})" class="px-10 py-5 border-2 border-green-500 text-green-400 font-orbitron font-bold text-lg tracking-widest hover:bg-green-500/20 transition-all uppercase rounded">Hear The Sound</button>
             </div>
-            
-            <div class="mt-12 font-cinzel text-xs text-yellow-800/60 tracking-[0.3em]">
-                <span class="inline-flex items-center">
-                    <span class="w-2 h-2 bg-red-600 rounded-full mr-3 animate-pulse"></span>
-                    TEMPLE STATUS: ACTIVE • ACCEPTING RITUAL REQUESTS
-                </span>
+            <div class="relative w-48 h-48 mx-auto mb-8">
+                <div class="vinyl-spin w-full h-full rounded-full bg-gradient-to-br from-gray-900 via-black to-gray-800 border-4 border-green-500/30 shadow-2xl flex items-center justify-center">
+                    <div class="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center">
+                        <div class="w-4 h-4 bg-green-400 rounded-full animate-pulse"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="font-rajdhani text-xs text-green-600/60 tracking-widest uppercase">
+                <span class="inline-flex items-center"><span class="w-2 h-2 bg-green-500 rounded-full mr-3 animate-pulse"></span>Now Accepting Bookings 2026</span>
             </div>
         </div>
-
         <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <svg class="w-6 h-6 text-yellow-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
         </div>
     </section>
 
-    <section id="prophecy" class="relative py-32 px-6">
+    <section id="vibe" class="relative py-32 px-6">
         <div class="max-w-7xl mx-auto">
             <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div class="relative group order-2 md:order-1">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-yellow-900 to-red-900 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000"></div>
-                    <div class="relative temple-glass p-8 rounded-lg brutalist-border">
-                        <div class="aspect-square bg-gradient-to-br from-gray-900 to-black rounded-lg flex items-center justify-center overflow-hidden relative">
-                            <div class="w-64 h-80 relative">
-                                <div class="absolute inset-0 bg-gradient-to-b from-yellow-900/20 to-red-900/20 rounded-full animate-pulse"></div>
-                                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-48 h-48 rounded-full border-4 border-yellow-700/30 flex items-center justify-center">
-                                    <div class="text-6xl">𒀭</div>
-                                </div>
-                                <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-32 h-32 bg-gradient-to-b from-yellow-600 to-yellow-900 rounded-full opacity-80"></div>
-                                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-cinzel text-yellow-500 text-xs tracking-widest rotate-90 whitespace-nowrap">
-                                    BALAG • DIVINE DRUM
-                                </div>
-                            </div>
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-green-500 to-cyan-500 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000"></div>
+                    <div class="relative club-card p-8 rounded-lg">
+                        <div class="aspect-square bg-gradient-to-br from-gray-900 to-black rounded-lg flex items-center justify-center">
+                            <div class="text-6xl">🎧</div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="space-y-6 order-1 md:order-2">
-                    <h2 class="font-cinzel text-4xl md:text-5xl font-bold mb-6 text-yellow-100">
-                        THE <span class="text-red-600">PROPHECY</span>
-                    </h2>
-                    <p class="text-gray-300 text-lg leading-relaxed border-l-2 border-yellow-900 pl-6">
-                        In the age when Gilgamesh walked the earth, I was the <span class="text-yellow-600">NAR</span>—the divine musician 
-                        who played the <span class="text-yellow-600">AL-GAR</span> lyre before Enki himself. My melodies could 
-                        calm the raging storms of Ishkur or summon the deepest emotions from mortal hearts.
-                    </p>
-                    <p class="text-gray-400 leading-relaxed">
-                        Through the sacred rituals of the <span class="text-yellow-700">BALAG</span> drum and the seven-note 
-                        flute, I learned that music is not merely sound—it is the manipulation of cosmic frequencies, 
-                        the very vibrations that bind the universe together.
-                    </p>
-                    <div class="grid grid-cols-3 gap-6 py-6 border-y border-yellow-900/30">
-                        <div class="text-center">
-                            <div class="font-cinzel text-3xl font-bold text-yellow-600 counter" data-target="5000">0</div>
-                            <div class="text-xs text-red-800 uppercase tracking-wider mt-1">Years</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="font-cinzel text-3xl font-bold text-red-700 counter" data-target="777">0</div>
-                            <div class="text-xs text-red-800 uppercase tracking-wider mt-1">Rituals</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="font-cinzel text-3xl font-bold text-yellow-700 counter" data-target="12">0</div>
-                            <div class="text-xs text-red-800 uppercase tracking-wider mt-1">Dimensions</div>
-                        </div>
+                <div class="space-y-6">
+                    <h2 class="font-orbitron text-4xl md:text-5xl font-bold mb-6 text-white">THE <span class="text-green-400">VIBE</span></h2>
+                    <p class="text-gray-300 text-lg leading-relaxed border-l-2 border-green-500 pl-6">By day, I am in the professional world. But when the sun sets and the bass drops, I am Yujo—a selector who understands that DJing is about reading the room and giving the people what they did not know they needed.</p>
+                    <p class="text-gray-400 leading-relaxed">From reggae dubplates that shake the foundation to techno that takes you on a journey. I play for the love of it. For the culture. For the moment when the crowd and the music become one.</p>
+                    <div class="grid grid-cols-3 gap-6 py-6 border-y border-green-500/20">
+                        <div class="text-center"><div class="font-orbitron text-3xl font-bold text-green-400 counter" data-target="10">0</div><div class="text-xs text-gray-500 uppercase tracking-wider mt-1">Years</div></div>
+                        <div class="text-center"><div class="font-orbitron text-3xl font-bold text-cyan-400 counter" data-target="500">0</div><div class="text-xs text-gray-500 uppercase tracking-wider mt-1">Events</div></div>
+                        <div class="text-center"><div class="font-orbitron text-3xl font-bold text-purple-400 counter" data-target="50">0</div><div class="text-xs text-gray-500 uppercase tracking-wider mt-1">Cities</div></div>
                     </div>
                     <div class="flex flex-wrap gap-3">
-                        <span class="px-4 py-2 temple-glass text-sm font-cinzel text-yellow-600 border border-yellow-800/30">TECHNO</span>
-                        <span class="px-4 py-2 temple-glass text-sm font-cinzel text-red-500 border border-red-900/30">RITUAL HOUSE</span>
-                        <span class="px-4 py-2 temple-glass text-sm font-cinzel text-yellow-700 border border-yellow-900/30">ANCIENT D&B</span>
-                        <span class="px-4 py-2 temple-glass text-sm font-cinzel text-red-400 border border-red-800/30">CYBER TRAP</span>
+                        <span class="px-4 py-2 club-card text-sm font-bold text-green-400">REGGAE</span>
+                        <span class="px-4 py-2 club-card text-sm font-bold text-cyan-400">DUB</span>
+                        <span class="px-4 py-2 club-card text-sm font-bold text-purple-400">TECHNO</span>
+                        <span class="px-4 py-2 club-card text-sm font-bold text-amber-400">HOUSE</span>
+                        <span class="px-4 py-2 club-card text-sm font-bold text-red-400">DRUM & BASS</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="relics" class="relative py-32 px-6 bg-gradient-to-b from-black via-red-950/20 to-black">
+    <section id="mixes" class="relative py-32 px-6 bg-gradient-to-b from-black via-purple-900/10 to-black">
         <div class="max-w-7xl mx-auto">
-            <h2 class="font-cinzel text-4xl md:text-6xl font-bold text-center mb-4 text-yellow-100">
-                SACRED <span class="text-red-700">RELICS</span>
-            </h2>
-            <p class="text-center text-yellow-800/60 font-cinzel text-sm tracking-widest mb-16 uppercase">
-                Audio Artifacts From The Digital Resurrection
-            </p>
-            
+            <h2 class="font-orbitron text-4xl md:text-6xl font-bold text-center mb-4 text-white">THE <span class="text-green-400">SOUND</span></h2>
+            <p class="text-center text-gray-500 font-rajdhani text-lg tracking-widest mb-16 uppercase">Latest Sessions Fresh From The Decks</p>
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="group relative brutalist-border temple-glass rounded-xl overflow-hidden cursor-pointer bg-black/40" onclick="playRelic(this)">
-                    <div class="aspect-video bg-gradient-to-br from-yellow-900/40 to-red-900/40 relative overflow-hidden">
+                <div class="group relative club-card rounded-xl overflow-hidden cursor-pointer" onclick="playMix(this)">
+                    <div class="aspect-video bg-gradient-to-br from-green-900/40 to-yellow-900/40 relative overflow-hidden">
                         <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-20 h-20 rounded-full border-2 border-yellow-600/50 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <div class="text-3xl text-yellow-600">𒂗</div>
+                            <div class="w-20 h-20 rounded-full bg-black/50 border-2 border-green-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <svg class="w-8 h-8 text-green-400 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             </div>
                         </div>
-                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-600 to-red-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                        <div class="absolute top-4 right-4 px-3 py-1 bg-green-500 text-black text-xs font-bold rounded">REGGAE</div>
                     </div>
                     <div class="p-6">
-                        <h3 class="font-cinzel text-xl font-bold mb-2 text-yellow-500 group-hover:text-yellow-400 transition-colors">The BALAG Protocol</h3>
-                        <p class="text-gray-500 text-sm mb-4 font-light">Industrial techno forged in the temples of Eridu. The sacred drum reborn through machines.</p>
-                        <div class="flex justify-between items-center text-xs text-red-900/60 font-orbitron">
-                            <span>TECHNO</span>
-                            <span>2:14:00</span>
-                        </div>
+                        <h3 class="font-orbitron text-xl font-bold mb-2 text-green-400 group-hover:text-green-300 transition-colors">Kingston Calling</h3>
+                        <p class="text-gray-400 text-sm mb-4">Deep dub reggae selections. Foundation vibrations for the soul. 90 minutes of pure roots.</p>
+                        <div class="flex justify-between items-center text-xs text-gray-500 font-rajdhani"><span>ROOTS & CULTURE</span><span>1:30:00</span></div>
                     </div>
                 </div>
-
-                <div class="group relative brutalist-border temple-glass rounded-xl overflow-hidden cursor-pointer bg-black/40" onclick="playRelic(this)">
-                    <div class="aspect-video bg-gradient-to-br from-red-900/40 to-purple-900/40 relative overflow-hidden">
+                <div class="group relative club-card rounded-xl overflow-hidden cursor-pointer" onclick="playMix(this)">
+                    <div class="aspect-video bg-gradient-to-br from-purple-900/40 to-cyan-900/40 relative overflow-hidden">
                         <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-20 h-20 rounded-full border-2 border-red-600/50 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <div class="text-3xl text-red-600">𒀭</div>
+                            <div class="w-20 h-20 rounded-full bg-black/50 border-2 border-cyan-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <svg class="w-8 h-8 text-cyan-400 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             </div>
                         </div>
-                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 to-yellow-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                        <div class="absolute top-4 right-4 px-3 py-1 bg-cyan-500 text-black text-xs font-bold rounded">TECHNO</div>
                     </div>
                     <div class="p-6">
-                        <h3 class="font-cinzel text-xl font-bold mb-2 text-red-500 group-hover:text-red-400 transition-colors">Enki's Return</h3>
-                        <p class="text-gray-500 text-sm mb-4 font-light">Melodic house from the water god's domain. Deep, flowing, transformative frequencies.</p>
-                        <div class="flex justify-between items-center text-xs text-red-900/60 font-orbitron">
-                            <span>HOUSE</span>
-                            <span>1:45:30</span>
-                        </div>
+                        <h3 class="font-orbitron text-xl font-bold mb-2 text-cyan-400 group-hover:text-cyan-300 transition-colors">Berlin Underground</h3>
+                        <p class="text-gray-400 text-sm mb-4">Industrial techno for the warehouse. Driving, hypnotic, relentless. Peak time energy.</p>
+                        <div class="flex justify-between items-center text-xs text-gray-500 font-rajdhani"><span>PEAK TIME</span><span>2:00:00</span></div>
                     </div>
                 </div>
-
-                <div class="group relative brutalist-border temple-glass rounded-xl overflow-hidden cursor-pointer bg-black/40" onclick="playRelic(this)">
-                    <div class="aspect-video bg-gradient-to-br from-purple-900/40 to-yellow-900/40 relative overflow-hidden">
+                <div class="group relative club-card rounded-xl overflow-hidden cursor-pointer" onclick="playMix(this)">
+                    <div class="aspect-video bg-gradient-to-br from-amber-900/40 to-pink-900/40 relative overflow-hidden">
                         <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-20 h-20 rounded-full border-2 border-purple-600/50 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <div class="text-3xl text-purple-600">𒊹</div>
+                            <div class="w-20 h-20 rounded-full bg-black/50 border-2 border-amber-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <svg class="w-8 h-8 text-amber-400 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             </div>
                         </div>
-                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 to-red-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                        <div class="absolute top-4 right-4 px-3 py-1 bg-amber-500 text-black text-xs font-bold rounded">HOUSE</div>
                     </div>
                     <div class="p-6">
-                        <h3 class="font-cinzel text-xl font-bold mb-2 text-purple-500 group-hover:text-purple-400 transition-colors">Ishtar's Battle Cry</h3>
-                        <p class="text-gray-500 text-sm mb-4 font-light">Drum & bass warfare. High-energy ritual combat music for the goddess of love and war.</p>
-                        <div class="flex justify-between items-center text-xs text-red-900/60 font-orbitron">
-                            <span>D&B</span>
-                            <span>1:30:00</span>
-                        </div>
+                        <h3 class="font-orbitron text-xl font-bold mb-2 text-amber-400 group-hover:text-amber-300 transition-colors">Sunrise Sessions</h3>
+                        <p class="text-gray-400 text-sm mb-4">Melodic house for the after-hours. When the party winds down but the vibe stays up.</p>
+                        <div class="flex justify-between items-center text-xs text-gray-500 font-rajdhani"><span>AFTER-HOURS</span><span>1:45:00</span></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="rituals" class="relative py-32 px-6">
+    <section id="events" class="relative py-32 px-6">
         <div class="max-w-5xl mx-auto">
-            <h2 class="font-cinzel text-4xl md:text-6xl font-bold text-center mb-4 text-yellow-100">
-                UPCOMING <span class="text-red-700">RITUALS</span>
-            </h2>
-            <p class="text-center text-yellow-800/60 font-cinzel text-sm tracking-widest mb-16 uppercase">
-                Sacred Gatherings & Ceremonial Performances
-            </p>
-            
+            <h2 class="font-orbitron text-4xl md:text-6xl font-bold text-center mb-4 text-white">WHERE TO <span class="text-green-400">FIND ME</span></h2>
+            <p class="text-center text-gray-500 font-rajdhani text-lg tracking-widest mb-16 uppercase">Upcoming Gigs & Club Nights</p>
             <div class="space-y-6">
-                <div class="temple-glass brutalist-border p-6 md:p-8 rounded-xl flex flex-col md:flex-row items-center justify-between group cursor-pointer hover:border-yellow-600 transition-colors">
+                <div class="club-card p-6 md:p-8 rounded-xl flex flex-col md:flex-row items-center justify-between group cursor-pointer hover:border-green-400 transition-colors">
                     <div class="flex items-center space-x-6 mb-4 md:mb-0">
-                        <div class="text-center min-w-[100px] border-r border-yellow-900/30 pr-6">
-                            <div class="text-3xl font-cinzel font-bold text-yellow-600">MAR</div>
-                            <div class="text-4xl font-orbitron font-bold text-red-600">28</div>
-                            <div class="text-xs text-yellow-800 mt-1">ANNO DOMINI</div>
+                        <div class="text-center min-w-[100px] border-r border-green-500/30 pr-6">
+                            <div class="text-3xl font-orbitron font-bold text-green-400">MAR</div>
+                            <div class="text-4xl font-bold text-white">28</div>
+                            <div class="text-xs text-gray-500 mt-1">2026</div>
                         </div>
                         <div>
-                            <h3 class="font-cinzel text-2xl font-bold mb-1 text-yellow-100 group-hover:text-yellow-400 transition-colors">The Warehouse Summoning</h3>
-                            <p class="text-gray-500 font-light">Brooklyn, NY • 11PM - 6AM • Underground Temple</p>
+                            <h3 class="font-orbitron text-2xl font-bold mb-1 text-white group-hover:text-green-400 transition-colors">Warehouse Project</h3>
+                            <p class="text-gray-400">Brooklyn, NY 11PM-6AM Underground</p>
                         </div>
                     </div>
-                    <button class="px-8 py-4 border border-yellow-700 text-yellow-600 font-cinzel font-bold tracking-wider hover:bg-yellow-900/30 transition-all uppercase text-sm">
-                        Seek Entry
-                    </button>
+                    <button class="px-8 py-4 border-2 border-green-500 text-green-400 font-orbitron font-bold tracking-wider hover:bg-green-500 hover:text-black transition-all uppercase text-sm rounded">Get Tickets</button>
                 </div>
-
-                <div class="temple-glass brutalist-border p-6 md:p-8 rounded-xl flex flex-col md:flex-row items-center justify-between group cursor-pointer hover:border-red-600 transition-colors">
+                <div class="club-card p-6 md:p-8 rounded-xl flex flex-col md:flex-row items-center justify-between group cursor-pointer hover:border-cyan-400 transition-colors">
                     <div class="flex items-center space-x-6 mb-4 md:mb-0">
-                        <div class="text-center min-w-[100px] border-r border-yellow-900/30 pr-6">
-                            <div class="text-3xl font-cinzel font-bold text-red-600">APR</div>
-                            <div class="text-4xl font-orbitron font-bold text-yellow-600">15</div>
-                            <div class="text-xs text-yellow-800 mt-1">ANNO DOMINI</div>
+                        <div class="text-center min-w-[100px] border-r border-green-500/30 pr-6">
+                            <div class="text-3xl font-orbitron font-bold text-cyan-400">APR</div>
+                            <div class="text-4xl font-bold text-white">15</div>
+                            <div class="text-xs text-gray-500 mt-1">2026</div>
                         </div>
                         <div>
-                            <h3 class="font-cinzel text-2xl font-bold mb-1 text-yellow-100 group-hover:text-red-400 transition-colors">Electric Forest Ceremony</h3>
-                            <p class="text-gray-500 font-light">Miami, FL • Sunset Ritual • Open Air Temple</p>
+                            <h3 class="font-orbitron text-2xl font-bold mb-1 text-white group-hover:text-cyan-400 transition-colors">Electric Forest</h3>
+                            <p class="text-gray-400">Miami, FL Sunset Session Outdoor</p>
                         </div>
                     </div>
-                    <button class="px-8 py-4 border border-red-800 text-red-500 font-cinzel font-bold tracking-wider hover:bg-red-900/30 transition-all uppercase text-sm">
-                        Seek Entry
-                    </button>
+                    <button class="px-8 py-4 border-2 border-cyan-500 text-cyan-400 font-orbitron font-bold tracking-wider hover:bg-cyan-500 hover:text-black transition-all uppercase text-sm rounded">Get Tickets</button>
                 </div>
-
-                <div class="temple-glass p-6 md:p-8 rounded-xl flex flex-col md:flex-row items-center justify-between opacity-40 grayscale">
+                <div class="club-card p-6 md:p-8 rounded-xl flex flex-col md:flex-row items-center justify-between opacity-40 grayscale">
                     <div class="flex items-center space-x-6 mb-4 md:mb-0">
-                        <div class="text-center min-w-[100px] border-r border-gray-800 pr-6">
-                            <div class="text-3xl font-cinzel font-bold text-gray-600">MAY</div>
-                            <div class="text-4xl font-orbitron font-bold text-gray-500">02</div>
-                            <div class="text-xs text-gray-700 mt-1">ANNO DOMINI</div>
+                        <div class="text-center min-w-[100px] border-r border-gray-700 pr-6">
+                            <div class="text-3xl font-orbitron font-bold text-gray-600">MAY</div>
+                            <div class="text-4xl font-bold text-gray-500">02</div>
+                            <div class="text-xs text-gray-600 mt-1">2026</div>
                         </div>
                         <div>
-                            <h3 class="font-cinzel text-2xl font-bold mb-1 text-gray-400">Private Invocation</h3>
-                            <p class="text-gray-600 font-light">Location Sealed • Secret Temple</p>
+                            <h3 class="font-orbitron text-2xl font-bold mb-1 text-gray-400">Private Event</h3>
+                            <p class="text-gray-600">Location TBA Invite Only</p>
                         </div>
                     </div>
-                    <span class="px-8 py-4 border border-gray-700 text-gray-600 font-cinzel font-bold tracking-wider uppercase text-sm">
-                        Ritual Sealed
-                    </span>
+                    <span class="px-8 py-4 border border-gray-600 text-gray-500 font-orbitron font-bold tracking-wider uppercase text-sm rounded">Sold Out</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="summon" class="relative py-32 px-6 bg-gradient-to-t from-black via-red-950/10 to-black">
+    <section id="book" class="relative py-32 px-6 bg-gradient-to-t from-black via-green-900/10 to-black">
         <div class="max-w-4xl mx-auto text-center">
-            <h2 class="font-cinzel text-4xl md:text-6xl font-bold mb-4 text-yellow-100">
-                SUMMON <span class="text-red-700">THE DEITY</span>
-            </h2>
-            <p class="text-lg text-gray-400 mb-12 max-w-2xl mx-auto font-light italic">
-                "To summon me is to invite the ancient frequencies into your realm. 
-                Prepare your offering, and I shall manifest."
-            </p>
-
-            <form class="max-w-lg mx-auto space-y-8 text-left" onsubmit="handleSummon(event)">
+            <h2 class="font-orbitron text-4xl md:text-6xl font-bold mb-4 text-white">BOOK <span class="text-green-400">YUJO</span></h2>
+            <p class="text-lg text-gray-400 mb-12 max-w-2xl mx-auto">Ready to bring the vibe to your event? Let us talk. I play clubs, festivals, private parties, and corporate events. Every set is tailored to the crowd.</p>
+            <form class="max-w-lg mx-auto space-y-6 text-left" onsubmit="handleBook(event)">
                 <div class="relative group">
-                    <input type="text" id="summoner-name" required 
-                           class="w-full bg-transparent border-b-2 border-yellow-900/50 py-4 px-2 focus:outline-none focus:border-yellow-600 transition-colors peer placeholder-transparent font-cinzel text-yellow-100"
-                           placeholder="Name">
-                    <label for="summoner-name" class="absolute left-2 top-4 text-yellow-800/60 transition-all peer-focus:-top-6 peer-focus:text-xs peer-focus:text-yellow-600 peer-valid:-top-6 peer-valid:text-xs peer-valid:text-yellow-600 font-cinzel uppercase tracking-wider">
-                        Thy Name
-                    </label>
+                    <input type="text" id="name" required class="w-full bg-transparent border-b-2 border-green-500/30 py-4 px-2 focus:outline-none focus:border-green-400 transition-colors peer placeholder-transparent font-rajdhani text-white text-lg" placeholder="Name">
+                    <label for="name" class="absolute left-2 top-4 text-gray-500 transition-all peer-focus:-top-6 peer-focus:text-xs peer-focus:text-green-400 peer-valid:-top-6 peer-valid:text-xs peer-valid:text-green-400 font-rajdhani uppercase tracking-wider">Your Name</label>
                 </div>
-                
                 <div class="relative group">
-                    <input type="email" id="summoner-email" required 
-                           class="w-full bg-transparent border-b-2 border-yellow-900/50 py-4 px-2 focus:outline-none focus:border-yellow-600 transition-colors peer placeholder-transparent font-cinzel text-yellow-100"
-                           placeholder="Email">
-                    <label for="summoner-email" class="absolute left-2 top-4 text-yellow-800/60 transition-all peer-focus:-top-6 peer-focus:text-xs peer-focus:text-yellow-600 peer-valid:-top-6 peer-valid:text-xs peer-valid:text-yellow-600 font-cinzel uppercase tracking-wider">
-                        Astral Address
-                    </label>
+                    <input type="email" id="email" required class="w-full bg-transparent border-b-2 border-green-500/30 py-4 px-2 focus:outline-none focus:border-green-400 transition-colors peer placeholder-transparent font-rajdhani text-white text-lg" placeholder="Email">
+                    <label for="email" class="absolute left-2 top-4 text-gray-500 transition-all peer-focus:-top-6 peer-focus:text-xs peer-focus:text-green-400 peer-valid:-top-6 peer-valid:text-xs peer-valid:text-green-400 font-rajdhani uppercase tracking-wider">Email Address</label>
                 </div>
-                
                 <div class="relative group">
-                    <select id="ritual-type" required
-                            class="w-full bg-transparent border-b-2 border-yellow-900/50 py-4 px-2 focus:outline-none focus:border-yellow-600 transition-colors text-gray-500 font-cinzel uppercase tracking-wider">
-                        <option value="" disabled selected class="bg-black">SELECT RITUAL TYPE</option>
-                        <option value="club" class="bg-black text-yellow-600">Temple Gathering (Club)</option>
-                        <option value="festival" class="bg-black text-red-500">Great Festival</option>
-                        <option value="private" class="bg-black text-yellow-700">Private Invocation</option>
-                        <option value="corporate" class="bg-black text-red-400">Corporate Ceremony</option>
-                        <option value="wedding" class="bg-black text-yellow-500">Union Ritual (Wedding)</option>
+                    <select id="event-type" required class="w-full bg-transparent border-b-2 border-green-500/30 py-4 px-2 focus:outline-none focus:border-green-400 transition-colors text-gray-400 font-rajdhani uppercase tracking-wider">
+                        <option value="" disabled selected class="bg-black">Select Event Type</option>
+                        <option value="club" class="bg-black text-green-400">Club Night</option>
+                        <option value="festival" class="bg-black text-cyan-400">Festival</option>
+                        <option value="private" class="bg-black text-purple-400">Private Party</option>
+                        <option value="corporate" class="bg-black text-amber-400">Corporate Event</option>
+                        <option value="wedding" class="bg-black text-pink-400">Wedding</option>
                     </select>
                 </div>
-                
                 <div class="relative group">
-                    <textarea id="summoner-intent" rows="4" required
-                              class="w-full bg-transparent border-b-2 border-yellow-900/50 py-4 px-2 focus:outline-none focus:border-yellow-600 transition-colors peer placeholder-transparent font-cinzel text-yellow-100 resize-none"
-                              placeholder="Message"></textarea>
-                    <label for="summoner-intent" class="absolute left-2 top-4 text-yellow-800/60 transition-all peer-focus:-top-6 peer-focus:text-xs peer-focus:text-yellow-600 peer-valid:-top-6 peer-valid:text-xs peer-valid:text-yellow-600 font-cinzel uppercase tracking-wider">
-                        State Thy Intent
-                    </label>
+                    <textarea id="message" rows="4" required class="w-full bg-transparent border-b-2 border-green-500/30 py-4 px-2 focus:outline-none focus:border-green-400 transition-colors peer placeholder-transparent font-rajdhani text-white text-lg resize-none" placeholder="Tell me about your event"></textarea>
+                    <label for="message" class="absolute left-2 top-4 text-gray-500 transition-all peer-focus:-top-6 peer-focus:text-xs peer-focus:text-green-400 peer-valid:-top-6 peer-valid:text-xs peer-valid:text-green-400 font-rajdhani uppercase tracking-wider">Tell Me About Your Event</label>
                 </div>
-
-                <button type="submit" 
-                        class="w-full py-5 bg-gradient-to-r from-yellow-900 via-red-900 to-yellow-900 font-cinzel font-bold text-lg tracking-[0.3em] hover:opacity-90 transition-opacity mt-8 rounded text-yellow-100 uppercase border border-yellow-700/50">
-                    Transmit Summoning
-                </button>
+                <button type="submit" class="w-full py-5 bg-green-500 text-black font-orbitron font-bold text-lg tracking-widest hover:bg-green-400 transition-all mt-8 rounded uppercase shadow-lg shadow-green-500/50">Send Request</button>
             </form>
-
             <div class="mt-16 flex justify-center space-x-8">
-                <a href="#" class="text-yellow-800/40 hover:text-yellow-600 transition-colors">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                </a>
-                <a href="#" class="text-yellow-800/40 hover:text-yellow-600 transition-colors">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
-                </a>
-                <a href="#" class="text-yellow-800/40 hover:text-yellow-600 transition-colors">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/></svg>
-                </a>
+                <a href="#" class="text-gray-600 hover:text-green-400 transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                <a href="#" class="text-gray-600 hover:text-green-400 transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
+                <a href="#" class="text-gray-600 hover:text-green-400 transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/></svg></a>
             </div>
         </div>
     </section>
 
-    <footer class="border-t border-yellow-900/20 py-8 px-6 text-center text-yellow-900/40 text-xs font-cinzel tracking-widest">
-        <p>&copy; MMXXVI YUJO. ANCIENT FREQUENCIES RESURRECTED.</p>
-        <p class="mt-2 text-[10px] opacity-50">𒀭 𒂗 𒆠 𒊹</p>
+    <footer class="border-t border-green-500/20 py-8 px-6 text-center text-gray-600 text-sm font-rajdhani tracking-widest">
+        <p>&copy; 2026 YUJO. UNDERGROUND FREQUENCY.</p>
+        <p class="mt-2 text-xs opacity-50">For the love of the music. For the culture.</p>
     </footer>
 
-    <div id="summon-toast" class="fixed bottom-8 right-8 transform translate-y-24 transition-transform duration-500 z-50 temple-glass px-6 py-4 rounded-lg border-l-4 border-yellow-600 max-w-sm brutalist-border">
+    <div id="toast" class="fixed bottom-8 right-8 transform translate-y-24 transition-transform duration-300 z-50 club-card px-6 py-4 rounded-lg border-l-4 border-green-500 max-w-sm">
         <div class="flex items-center space-x-3">
-            <div class="text-yellow-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            </div>
+            <div class="text-green-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
             <div>
-                <h4 class="font-cinzel font-bold text-yellow-100">Summoning Received</h4>
-                <p class="text-sm text-gray-500">The deity has heard your call. Expect response.</p>
+                <h4 class="font-orbitron font-bold text-white">Message Sent</h4>
+                <p class="text-sm text-gray-400">I will get back to you within 24 hours.</p>
             </div>
         </div>
     </div>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
-
         const mobileBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
-        mobileBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        const canvas = document.getElementById('sacred-canvas');
-        const ctx = canvas.getContext('2d');
-        let rotation = 0;
-        
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        function drawSacredGeometry() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = 'rgba(201, 169, 97, 0.1)';
-            ctx.lineWidth = 1;
-            
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const radius = Math.min(centerX, centerY) * 0.8;
-            
-            ctx.save();
-            ctx.translate(centerX, centerY);
-            ctx.rotate(rotation);
-            
-            for (let i = 0; i < 6; i++) {
-                ctx.beginPath();
-                ctx.arc(0, 0, radius * (0.2 + i * 0.15), 0, Math.PI * 2);
-                ctx.stroke();
-                
-                ctx.beginPath();
-                for (let j = 0; j < 6; j++) {
-                    const angle = (j * Math.PI) / 3;
-                    const x = Math.cos(angle) * radius * (0.3 + i * 0.12);
-                    const y = Math.sin(angle) * radius * (0.3 + i * 0.12);
-                    if (j === 0) ctx.moveTo(x, y);
-                    else ctx.lineTo(x, y);
-                }
-                ctx.closePath();
-                ctx.stroke();
-            }
-            
-            ctx.restore();
-            rotation += 0.002;
-            requestAnimationFrame(drawSacredGeometry);
-        }
-        drawSacredGeometry();
-
-        gsap.from("h1", {
-            y: 100,
-            opacity: 0,
-            duration: 2,
-            ease: "power4.out",
-            delay: 0.5
-        });
-
+        mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+        gsap.from("h1", { y: 100, opacity: 0, duration: 1.5, ease: "power4.out", delay: 0.5 });
         const counters = document.querySelectorAll('.counter');
         counters.forEach(counter => {
             const target = parseInt(counter.getAttribute('data-target'));
-            gsap.to(counter, {
-                innerHTML: target,
-                duration: 3,
-                snap: { innerHTML: 1 },
-                scrollTrigger: {
-                    trigger: counter,
-                    start: "top 80%",
-                    once: true
-                }
-            });
+            gsap.to(counter, { innerHTML: target, duration: 2, snap: { innerHTML: 1 }, scrollTrigger: { trigger: counter, start: "top 80%", once: true } });
         });
-
         gsap.utils.toArray('section').forEach(section => {
-            gsap.from(section.querySelectorAll('h2, p, .temple-glass'), {
-                y: 50,
-                opacity: 0,
-                duration: 1.2,
-                stagger: 0.2,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: section,
-                    start: "top 70%",
-                    once: true
-                }
-            });
+            gsap.from(section.querySelectorAll('h2, p, .club-card'), { y: 50, opacity: 0, duration: 1, stagger: 0.2, ease: "power3.out", scrollTrigger: { trigger: section, start: "top 70%", once: true } });
         });
-
-        function handleSummon(e) {
+        function handleBook(e) {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
             const originalText = btn.innerText;
-            
-            btn.innerText = "TRANSMITTING...";
+            btn.innerText = "SENDING...";
             btn.disabled = true;
-            
             setTimeout(() => {
-                btn.innerText = "SUMMONING SENT";
-                btn.classList.add('bg-yellow-900');
-                showSummonToast();
-                
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.disabled = false;
-                    btn.classList.remove('bg-yellow-900');
-                    e.target.reset();
-                }, 3000);
-            }, 2000);
+                btn.innerText = "SENT";
+                btn.classList.add('bg-green-600');
+                showToast();
+                setTimeout(() => { btn.innerText = originalText; btn.disabled = false; btn.classList.remove('bg-green-600'); e.target.reset(); }, 3000);
+            }, 1500);
         }
-
-        function showSummonToast() {
-            const toast = document.getElementById('summon-toast');
+        function showToast() {
+            const toast = document.getElementById('toast');
             toast.classList.remove('translate-y-24');
-            setTimeout(() => {
-                toast.classList.add('translate-y-24');
-            }, 5000);
+            setTimeout(() => { toast.classList.add('translate-y-24'); }, 4000);
         }
-
-        function playRelic(element) {
+        function playMix(element) {
             const title = element.querySelector('h3').innerText;
-            
             const ripple = document.createElement('div');
-            ripple.className = 'absolute inset-0 bg-yellow-600/20 animate-ping rounded-xl';
+            ripple.className = 'absolute inset-0 bg-green-500/20 animate-ping rounded-xl';
             element.appendChild(ripple);
-            
             setTimeout(() => ripple.remove(), 1000);
-            
-            const toast = document.getElementById('summon-toast');
-            toast.querySelector('h4').innerText = "Ancient Relic Playing";
-            toast.querySelector('p').innerText = title + " • Channeling frequencies...";
+            const toast = document.getElementById('toast');
+            toast.querySelector('h4').innerText = "Now Playing";
+            toast.querySelector('p').innerText = title + " Loading...";
             toast.classList.remove('translate-y-24');
-            
             setTimeout(() => {
                 toast.classList.add('translate-y-24');
-                setTimeout(() => {
-                    toast.querySelector('h4').innerText = "Summoning Received";
-                    toast.querySelector('p').innerText = "The deity has heard your call. Expect response.";
-                }, 500);
-            }, 4000);
+                setTimeout(() => { toast.querySelector('h4').innerText = "Message Sent"; toast.querySelector('p').innerText = "I will get back to you within 24 hours."; }, 500);
+            }, 3000);
         }
-
-        document.addEventListener('mousemove', (e) => {
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
-            
-            gsap.to('.absolute.rounded-full', {
-                x: x * 20,
-                y: y * 20,
-                duration: 1,
-                ease: "power2.out"
-            });
-        });
-
         setInterval(() => {
-            const glitch = document.querySelector('.deity-glitch');
-            if (glitch && Math.random() > 0.8) {
-                glitch.style.animation = 'none';
-                setTimeout(() => {
-                    glitch.style.animation = 'deity-pulse 4s infinite';
-                }, 150);
+            const neon = document.querySelector('.neon-text');
+            if (neon && Math.random() > 0.9) {
+                neon.style.textShadow = '0 0 20px #00ff41, 0 0 40px #00ff41, 0 0 80px #00ff41';
+                setTimeout(() => { neon.style.textShadow = '0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 40px #00ff41'; }, 100);
             }
-        }, 4000);
+        }, 3000);
     </script>
 </body>
 </html>
